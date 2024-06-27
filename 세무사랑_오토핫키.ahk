@@ -1,11 +1,12 @@
 #Requires AutoHotkey v2.0
 
 main := Gui(Options := 'Resize -SysMenu',"세무사랑 오토핫키")
-radio1 :=main.AddRadio('Center vTrigger Checked',"법인")
+radio1 :=main.AddRadio('Center Checked',"법인")
 radio2 :=main.AddRadio('Center',"개인")
-radio1.OnEvent('Click',법인활성화)
-radio2.OnEvent('Click',개인활성화)
+radio1.OnEvent('Click',체크확인)
+radio2.OnEvent('Click',체크확인)
 main.Show("AutoSize")
+체크확인
 
 xl := ComObjActive("excel.application")
 
@@ -15,30 +16,28 @@ xl := ComObjActive("excel.application")
 #SuspendExempt false
 
 ;법인개인 버튼 작동
-법인활성화(*){
-    if (radio1 := 1){
+체크확인(*){
+    if (radio1.Value = 1){
         global 설정 := "법인"
     }   
-}
-
-개인활성화(*){
-    if (radio2 := 1){
+    else if(radio2.Value = 1){
         global 설정 := "개인"
     }   
 }
 
 excelFunc(지정키){
+    
     try{
         지정 := xl.Sheets(설정).Range("A:A").find(지정키) ;find 안에 값 수정하면 원하는 값 찾음
         번호 := 지정.offset(0,1).Text ;지정에서 찾은거 옆으로 한칸 있는 값
         SendInput(번호)
         Send('{Enter}')
-    }
-    catch as e
+    } catch as e
         {
             MsgBox "엑셀에 단축키 설정이 되어있지 않습니다"
             Exit
         }
+            
 }
 
 ;단축키 만들어서 지정 가능
