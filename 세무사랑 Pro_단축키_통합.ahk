@@ -1,14 +1,21 @@
 #Requires AutoHotkey v2.0
 
-main := Gui(Options := 'Resize -SysMenu',"세무사랑 오토핫키")
+main := Gui(Options := 'Resize -SysMenu',"세무사랑 Pro 단축키")
 radio1 :=main.AddRadio('Center Checked',"법인")
 radio2 :=main.AddRadio('Center',"개인")
 radio1.OnEvent('Click',체크확인)
 radio2.OnEvent('Click',체크확인)
-main.Show("AutoSize")
+main.Show("w127")
 체크확인
 
-xl := ComObjActive("excel.application")
+SelectedFile := FileSelect(,"세무사랑 Pro_단축키 리스트_배포용(ver 1.25).xlsx")
+try { 
+    workbook := ComObjGet(SelectedFile)
+} catch as e
+{
+    MsgBox "참조할 엑셀파일을 선택해주세요"
+    ExitApp
+}
 
 ;중지 키 
 #SuspendExempt true
@@ -28,7 +35,7 @@ xl := ComObjActive("excel.application")
 excelFunc(지정키){
     
     try{
-        지정 := xl.Sheets(설정).Range("A:A").find(지정키) ;find 안에 값 수정하면 원하는 값 찾음
+        지정 := workbook.Sheets(설정).Range("A:A").find(지정키) ;find 안에 값 수정하면 원하는 값 찾음
         번호 := 지정.offset(0,1).Text ;지정에서 찾은거 옆으로 한칸 있는 값
         SendInput(번호)
         Send('{Enter}')
