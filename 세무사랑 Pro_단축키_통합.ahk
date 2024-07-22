@@ -5,16 +5,20 @@ radio1 :=main.AddRadio('Center Checked',"법인")
 radio2 :=main.AddRadio('Center',"개인")
 radio1.OnEvent('Click',체크확인)
 radio2.OnEvent('Click',체크확인)
+refreshBtn := main.AddButton('y+20', "엑셀선택")
+refreshBtn.OnEvent("Click", 파일선택)
 main.Show("w127")
 체크확인
 
-SelectedFile := FileSelect(,"세무사랑 Pro_단축키 리스트_배포용(ver 1.25).xlsx")
-try { 
-    workbook := ComObjGet(SelectedFile)
-} catch as e
-{
-    MsgBox "참조할 엑셀파일을 선택해주세요"
-    ExitApp
+
+파일선택(*){
+    global SelectedFile := FileSelect(,"세무사랑 Pro_단축키 리스트_배포용(ver 1.25).xlsx")
+    try { 
+        global workbook := ComObjGet(SelectedFile)
+    } catch as e
+    {
+        MsgBox "참조할 엑셀파일을 선택해주세요"
+    }
 }
 
 ;중지 키 
